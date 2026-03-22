@@ -1,0 +1,14 @@
+<launch>
+  <!--打开机器人及其仿真环境-->
+  <include file="$(find wpr_simulation)/launch/wpb_stage_robocup.launch"/>
+  <!--打开局部规划器-->
+  <include file="$(find rpp_pkg)/launch/rpp_nav.launch"/>
+  <!-- <include file="$(find rpp_pkg)/launch/dwa_nav.launch"/> -->
+
+  <!--===========================调试部分=================================-->
+
+
+
+  <!-- <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot"/>  -->
+  <!-- <node name="path_visualization" pkg="rpp_pkg" type="path_visualization"/>  -->
+</launch>

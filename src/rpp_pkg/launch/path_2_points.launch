@@ -1,0 +1,10 @@
+
+<launch>
+
+    <include file="$(find rpp_pkg)/launch/run_in_real.launch"/>
+    <!-- 道格拉斯降采样 -->
+    <node name="douglas" pkg="rpp_pkg" type="douglas">
+        <param name="douglas_epsilon" value="0.2" />     
+    </node> 
+
+</launch>

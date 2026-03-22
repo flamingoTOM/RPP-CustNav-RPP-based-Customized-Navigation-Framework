@@ -1,0 +1,24 @@
+local_costmap:
+  global_frame: map                    #地图坐标系（里程计输出的tf)
+  robot_base_frame: base_link     #机器人底盘坐标系
+  static_map: false                     #不使用保存地图
+  rolling_window: true                  #局部代价地图跟随机器人一起移动
+  width:  10.0                            #局部代价地图尺寸
+  height: 10.0
+  update_frequency: 10.0                #更新局部代价地图的频率（一般为激光雷达扫描频率）
+  publish_frequency: 10.0
+  transform_tolerance: 1.0
+
+  scan:
+      sensor_frame: body
+      data_type: LaserScan
+      topic: /scan
+      observation_persistence: 0
+      expected_update_rate: 10
+      marking: true #应使用此观察值来标记障碍物
+      clearing: true # 应该使用此观察结果来清除自由空间
+      inf_is_valid: true
+      obstacle_range: 5
+      raytrace_range: 5
+      max_obstacle_height: 2
+      min_obstacle_height: -0.5

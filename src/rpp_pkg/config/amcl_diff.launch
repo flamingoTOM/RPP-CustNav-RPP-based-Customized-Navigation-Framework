@@ -1,0 +1,47 @@
+<launch>
+  <!-- AMCL节点配置（根据机器人类型选择参数） -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <!-- 坐标系配置（必须明确设置） -->
+    <param name="global_frame_id" value="map"/>      <!-- 地图坐标系 -->
+    <param name="base_frame_id" value="base_footprint"/>  <!-- 机器人基坐标系（与里程计、TF保持一致） -->
+    <param name="odom_frame_id" value="odom"/>      <!-- 里程计坐标系 -->
+
+    <!-- 里程计模型：diff（差速机器人）/ omni（全向机器人） -->
+    <param name="odom_model_type" value="diff"/>    <!-- 差速机器人优先选diff -->
+
+    <!-- 里程计噪声参数（根据实际调试调整） -->
+    <param name="odom_alpha1" value="0.2"/>   <!-- 旋转噪声（小角度） -->
+    <param name="odom_alpha2" value="0.2"/>   <!-- 旋转噪声（大角度） -->
+    <param name="odom_alpha3" value="0.8"/>   <!-- 平移噪声（线性运动） -->
+    <param name="odom_alpha4" value="0.2"/>   <!-- 平移噪声（旋转时） -->
+    <param name="odom_alpha5" value="0.1"/>   <!-- 全向机器人专用（差速可忽略） -->
+
+    <!-- 粒子滤波参数 -->
+    <param name="min_particles" value="50"/>    <!-- 最小粒子数（差速机器人足够） -->
+    <param name="max_particles" value="500"/>   <!-- 最大粒子数（平衡精度与性能） -->
+    <param name="kld_err" value="0.05"/>        <!-- KLD误差阈值 -->
+    <param name="kld_z" value="0.99"/>          <!-- 置信度 -->
+    <param name="resample_interval" value="1"/> <!-- 重采样间隔（每步重采样） -->
+
+    <!-- 激光雷达参数 -->
+    <param name="laser_model_type" value="likelihood_field"/>  <!-- 激光匹配模型 -->
+    <param name="laser_max_beams" value="30"/>    <!-- 每帧使用的激光束数量 -->
+    <param name="laser_likelihood_max_dist" value="2.0"/>  <!-- 激光有效匹配距离 -->
+    <param name="laser_sigma_hit" value="0.2"/>   <!-- 命中模型标准差（定位精度相关） -->
+    <param name="laser_z_hit" value="0.5"/>       <!-- 命中概率权重 -->
+    <param name="laser_z_short" value="0.05"/>    <!-- 短距离误检权重 -->
+    <param name="laser_z_max" value="0.05"/>      <!-- 超距误检权重 -->
+    <param name="laser_z_rand" value="0.5"/>      <!-- 随机噪声权重 -->
+    <param name="laser_lambda_short" value="0.1"/> <!-- 短距离模型参数 -->
+
+    <!-- 更新触发阈值（机器人移动多少后更新粒子） -->
+    <param name="update_min_d" value="0.1"/>  <!-- 平移阈值（米） -->
+    <param name="update_min_a" value="0.5"/>  <!-- 旋转阈值（弧度） -->
+
+    <!-- 其他参数 -->
+    <param name="transform_tolerance" value="0.1"/>  <!-- TF变换容忍时间（秒） -->
+    <param name="gui_publish_rate" value="30.0"/>    <!-- 可视化发布频率（Hz） -->
+    <param name="recovery_alpha_slow" value="0.0"/>  <!-- 关闭缓慢恢复（避免异常抖动） -->
+    <param name="recovery_alpha_fast" value="0.0"/>  <!-- 关闭快速恢复 -->
+  </node>
+</launch>

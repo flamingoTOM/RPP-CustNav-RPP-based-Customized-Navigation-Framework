@@ -1,0 +1,14 @@
+# VS Code IntelliSense database files
+**/.vscode/browse.vc.db
+**/.vscode/browse.vc.db-shm
+**/.vscode/browse.vc.db-wal
+**/.vscode/ipch/
+
+# Build output
+build/
+devel/
+install/
+
+# OS files
+.DS_Store
+Thumbs.db

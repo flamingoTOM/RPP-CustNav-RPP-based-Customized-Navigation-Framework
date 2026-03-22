@@ -1,0 +1,5 @@
+<library path="lib/librpp_pkg">
+  <class name="rpp_pkg/PointGlobalPlanner" type="rpp_pkg::PointGlobalPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>Custom global planner using B-Spline curve based on points from XML</description>
+  </class>
+</library>

@@ -1,0 +1,51 @@
+
+<launch>
+
+    <arg name="cmd_vel_topic" default="/cmd_vel" />
+    <arg name="odom_topic" default="combined_odom" />
+  
+
+    <!--- move_base -->
+    <node pkg="move_base" type="move_base" name="move_base">
+        <!-- <param name="PointGlobalPlanner/xml_path" value="$(find rpp_pkg)/path_points/downsampled_path.xml" /> -->
+
+        <rosparam file="$(find rpp_pkg)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find rpp_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find rpp_pkg)/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find rpp_pkg)/config/local_costmap_params.yaml"  command="load" />
+        
+        <param name="base_global_planner" value="global_planner/GlobalPlanner" /> 
+        <!-- <param name="base_global_planner" value="rpp_pkg/PointGlobalPlanner" /> 
+        <param name="PointGlobalPlanner/publish_frequency" value="10.0" /> -->
+
+        <!-- <param name="base_local_planner"  value="rpp_pkg/RPPController" />
+        <rosparam file="$(find rpp_pkg)/config/rpp_local_planner_params.yaml" command="load" ns="RPPController" /> -->
+         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+        <rosparam file="$(find rpp_pkg)/config/dwa_local_planner_params.yaml" command="load" ns="DWAPlannerROS" />
+        
+        
+        <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+        <remap from="odom" to="$(arg odom_topic)"/>
+
+    
+    </node> 
+    <!--3. 雷达 -->
+    <include file="$(find rpp_pkg)/launch/PointsCloud2toLaserscan.launch"/>
+
+    
+
+
+
+    <!-- <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot"/> -->
+
+    <!-- plotjuggler数据可视化 -->
+    <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" output="screen">
+        <param name="layout_file" value="$(find rpp_pkg)/config/plotjuggler.xml" /> 
+    </node> -->
+    
+    <!--- 航点设置 -->
+    <!-- <node pkg="waterplus_map_tools" type="wp_manager" name="wp_manager" output="screen"/>
+    <node pkg="waterplus_map_tools" type="wp_navi_server" name="wp_navi_server" output="screen"/>
+    <node pkg="nav_pkg" type="wp_node" name="wp_node"/> -->
+
+</launch>

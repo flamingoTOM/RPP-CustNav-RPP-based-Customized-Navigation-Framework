@@ -1,0 +1,12 @@
+<launch>
+    
+    <!-- mid360 -->
+    <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch"/>
+    
+    <!-- fast_lio -->
+    <include file="$(find fast_lio)/launch/mapping_mid360.launch"/>
+
+    <!-- car -->
+    <include file="$(find car_move)/launch/go.launch"/>
+
+</launch>

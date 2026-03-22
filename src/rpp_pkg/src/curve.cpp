@@ -1,0 +1,39 @@
+#include "rpp_pkg/log.h"
+#include "rpp_pkg/curve.h"
+
+namespace rpp_pkg
+{
+
+/**
+ * @brief Construct a new Curve object
+ * @param step  Simulation or interpolation size
+ */
+Curve::Curve(double step) : step_(step)
+{
+}
+
+/**
+ * @brief Calculate the distance of given path.
+ * @param path    the trajectory
+ * @return length the length of path
+ */
+double Curve::distance(const Points3d& path)
+{
+  double length = 0.0;
+  for (size_t i = 1; i < path.size(); ++i)
+  {
+    length += std::hypot(path[i - 1].x() - path[i].x(), path[i - 1].y() - path[i].y());
+  }
+  return length;
+}
+
+/**
+ * @brief Configure the simulation step.
+ * @param step    Simulation or interpolation size
+ */
+void Curve::setStep(double step)
+{
+  CHECK_GT(step, 0.0);
+  step_ = step;
+}
+} 

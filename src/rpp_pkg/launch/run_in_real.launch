@@ -1,0 +1,64 @@
+<launch>
+
+<!-- 1.基础参数 -->
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="combined_odom" />
+  
+
+  <arg name="pnc_rviz" default="true"/>
+
+  
+<!--2. movebase -->
+  <node pkg="move_base" type="move_base" name="move_base">
+      <!-- <param name="PointGlobalPlanner/xml_path" value="$(find rpp_pkg)/path_points/downsampled_path.xml" /> -->
+
+      <rosparam file="$(find rpp_pkg)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find rpp_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find rpp_pkg)/config/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find rpp_pkg)/config/local_costmap_params.yaml"  command="load" />
+      
+      <!-- <param name="base_global_planner" value="global_planner/GlobalPlanner" />  -->
+      <param name="base_global_planner" value="rpp_pkg/PointGlobalPlanner" /> 
+      <!-- <param name="PointGlobalPlanner/publish_frequency" value="10.0" /> -->
+
+      <param name="base_local_planner"  value="rpp_pkg/RPPController" />
+      <rosparam file="$(find rpp_pkg)/config/rpp_local_planner_params.yaml" command="load" ns="RPPController" />
+
+
+      <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+      <remap from="odom" to="$(arg odom_topic)"/>
+  </node> 
+  
+
+<!--3. 雷达 -->
+  <include file="$(find rpp_pkg)/launch/PointsCloud2toLaserscan.launch"/>
+
+
+
+
+<!-- 5.定位 -->
+  <arg name="localization_rviz" default="false"/>
+    <arg name="hdl_rviz" default="true"/>
+    <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch"/>
+
+    <node pkg="rpp_pkg" type="imu_trans.py" name="imu_trans" />
+    
+    <!-- hdl_localization -->
+    <include file="$(find xj_robot_slam)/launch/3dmap_hdl_localization.launch">
+        <arg name="rviz_loca" value="$(arg localization_rviz)" />
+        <arg name="rviz_hdl" value="$(arg hdl_rviz)" />
+    </include>
+
+
+<!-- 6.底盘 -->
+  <include file="$(find car_move)/launch/go.launch"/>
+
+  
+
+  <!--===========================调试部分=================================-->
+
+
+
+  <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot"/> 
+  <node name="path_visualization" pkg="rpp_pkg" type="path_visualization"/> 
+</launch>
